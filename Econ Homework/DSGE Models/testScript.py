@@ -1,0 +1,2 @@
+execfile('/Users/spencerlyon/Dropbox/Python Labs/Spencer Lyon/Econ Homework/DSGE Models/DominateDSGE.py')
+execfile('/Users/spencerlyon/Dropbox/Python Labs/Spencer Lyon/Econ Homework/DSGE Models/UhligSolve.py')
