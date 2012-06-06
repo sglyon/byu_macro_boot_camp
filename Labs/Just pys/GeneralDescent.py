@@ -4,6 +4,8 @@ Created May 17, 2012
 Author: Spencer Lyon
 
 Optimization.py
+
+Some changes
 """
 import scipy as sp
 import numpy as np
