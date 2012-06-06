@@ -15,7 +15,7 @@ y = sp.array([5, 1, 5, 14, 3, 19, 1, 1, 4, 22])
 t = sp.array([94.320, 15.720, 62.880, 125.76, 5.24,
 			  31.44, 1.048, 1.048, 2.096, 10.48])
 r = sp.array([.053, .064, .080, .111, .573, .604, .954, .954, 1.91, 2.099])
-theta = y*t
+
 
 to_pass = np.vstack((y, t))
 
@@ -38,9 +38,6 @@ def gibbs(obs, n=10000, burn=1000):
 
     Outputs:
     """
-    # IG (k* lapha + c, np.sum(theta) + 1/d)
-
-    # Define parameters
     alpha = 0.7
     d = 1.0
     c = 0.1
