@@ -5,7 +5,7 @@ Author: Spencer Lyon
 
 Optimization.py
 
-Some changes
+Other changes
 """
 import scipy as sp
 import numpy as np
