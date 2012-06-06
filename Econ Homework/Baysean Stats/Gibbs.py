@@ -77,9 +77,6 @@ def gen_plots(theta_ind):
 
     Outputs:
         None: This funciton automaticlly generates and shows all plots.
-
-    TODO:
-        DELETE THIS FOR CHASE.
     """
 
     beta, theta = gibbs(to_pass)
