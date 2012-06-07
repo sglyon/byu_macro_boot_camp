@@ -45,6 +45,11 @@ def g(w, theta):
     m1 = np.exp(theta[2])
     x = (w - mu) / sigma
 
+    # Do we need the Jacobian in this funciton? If so it is hte np.exp(*) at the
+    # end
+    #return ((np.exp(x) / (1 + np.exp(x))) ** m1) * np.exp(theta[1] + theta[2])
+
+
     return (np.exp(x) / (1 + np.exp(x))) ** m1
 
 
