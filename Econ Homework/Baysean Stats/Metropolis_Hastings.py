@@ -7,10 +7,11 @@ Author: Spencer Lyon
 import numpy as np
 import scipy as sp
 import scipy.stats as st
+sp.set_printoptions(linewidth=140, suppress = True, precision = 5)
 
 w = np.array([1.6907, 1.7242, 1.7552, 1.7842, 1.8113, 1.8369, 1.8610, 1.8839])
 y = np.array([6, 13, 18, 28, 52, 53, 61, 60.0], dtype = float)
-n = np.array([59, 60, 62, 56, 63, 59, 63, 60.0], dtype = float)
+n = np.array([59, 60, 62, 56, 63, 59, 62, 60.0], dtype = float)
 
 a0 = .25
 b0= 4.
@@ -24,6 +25,7 @@ sig = np.diag([0.00012, 0.33, 0.10])
 theta_1 = np.array([1.8, -2.7, -1])
 theta_2 = np.array([1.5, -4, -2.8])
 theta_3 = np.array([2.1, -1.4, 1.5])
+
 
 def g(w, theta):
     """
@@ -39,13 +41,12 @@ def g(w, theta):
         val: The value of the function at the given w.
     """
     mu = theta[0]
-    sigma = np.sqrt(2 * np.exp(theta[1]) )
-    m1 = np.exp(theta[1])
+    sigma = np.exp(theta[1])
+    m1 = np.exp(theta[2])
     x = (w - mu) / sigma
 
     return (np.exp(x) / (1 + np.exp(x))) ** m1
 
-# Some changes
 
 def compute_r(theta):
     """
@@ -59,7 +60,7 @@ def compute_r(theta):
 
 
     Outputs:
-    r: The coefficient r computed at using the equations in the problem.
+    r: The coefficient r computed using the equations in the problem.
     """
 
     theta_star = np.random.multivariate_normal(theta, sig)
@@ -77,5 +78,3 @@ def compute_r(theta):
     r = np.exp(np.log(r_num) - np.log(r_denom))
 
     return r
-
-    #np.product( g(w)**y * ( )
