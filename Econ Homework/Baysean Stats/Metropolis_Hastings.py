@@ -3,11 +3,9 @@ Created June 5, 2012
 
 Author: Spencer Lyon
 """
-
 import numpy as np
 import scipy as sp
 import scipy.stats as st
-sp.set_printoptions(linewidth=140, suppress = True, precision = 5)
 
 w = np.array([1.6907, 1.7242, 1.7552, 1.7842, 1.8113, 1.8369, 1.8610, 1.8839])
 y = np.array([6, 13, 18, 28, 52, 53, 61, 60.0], dtype = float)
@@ -20,9 +18,9 @@ d0 = 10.
 e0 = 2.000004
 f0 = 1000
 
-sig = np.diag([0.00012, 0.33, 0.10])
+sig = np.diag([0.00012, 0.033, 0.10])
 
-theta_1 = np.array([1.8, -2.7, -1])
+theta_1 = np.array([1.8, -3.9, -1], dtype = float)
 theta_2 = np.array([1.5, -4, -2.8])
 theta_3 = np.array([2.1, -1.4, 1.5])
 
@@ -45,11 +43,6 @@ def g(w, theta):
     m1 = np.exp(theta[2])
     x = (w - mu) / sigma
 
-    # Do we need the Jacobian in this funciton? If so it is hte np.exp(*) at the
-    # end
-    #return ((np.exp(x) / (1 + np.exp(x))) ** m1) * np.exp(theta[1] + theta[2])
-
-
     return (np.exp(x) / (1 + np.exp(x))) ** m1
 
 
@@ -70,16 +63,51 @@ def compute_r(theta):
 
     theta_star = np.random.multivariate_normal(theta, sig)
 
-    r_num = np.product( g(w,theta_star)**y * (1 - g(w, theta_star))**(n - y))* \
-            np.exp(a0 * theta_star[2] - 2  * e0 * theta_star[1]) * \
-            np.exp(-1/2 * ((theta_star[0] - c0)/d0)**2 - np.exp(theta_star[2]/b0)
-                    - np.exp( -2 * theta_star[1]) / f0)
+    # Taking the log before I calculate h(theta) [numerical precision errors].
+    r_num = np.sum( y * np.log(g(w,theta_star)) + (n-y) * np.log((1 - g(w, theta_star)))) + \
+            a0 * theta_star[2] - 2  * e0 * theta_star[1] + \
+            -1/2 * ((theta_star[0] - c0)/d0)**2 - np.exp(theta_star[2])/b0 \
+                    - np.exp( -2 * theta_star[1]) / f0
 
-    r_denom = np.product( g(w,theta)**y * (1 - g(w,theta))**(n - y)) * \
-            np.exp(a0 * theta[2] - 2 * e0 * theta[1]) * \
-            np.exp(-1/2 * ((theta[0] - c0) / d0) **2 - np.exp(theta[2] / b0)
-                    - np.exp( -2 * theta[1]) / f0)
+    r_denom = np.sum( y * np.log(g(w,theta)) + (n-y) * np.log((1 - g(w, theta)))) + \
+            a0 * theta[2] - 2  * e0 * theta[1] + \
+            -1/2 * ((theta[0] - c0)/d0)**2 - np.exp(theta[2])/b0 \
+                    - np.exp( -2 * theta[1]) / f0
 
-    r = np.exp(np.log(r_num) - np.log(r_denom))
+    #print np.exp(r_num)
+    #print np.exp(r_denom)
 
-    return r
+    #r_num = np.product( g(w,theta_star)**y * (1 - g(w, theta_star))**(n - y))* \
+    #        np.exp(a0 * theta_star[2] - 2  * e0 * theta_star[1]) * \
+    #        np.exp(-1/2 * ((theta_star[0] - c0)/d0)**2 - np.exp(theta_star[2]/b0)
+    #                - np.exp( -2 * theta_star[1]) / f0)
+    #
+    #r_denom = np.product( g(w,theta)**y * (1 - g(w,theta))**(n - y)) * \
+    #        np.exp(a0 * theta[2] - 2 * e0 * theta[1]) * \
+    #        np.exp(-1/2 * ((theta[0] - c0) / d0) **2 - np.exp(theta[2] / b0)
+    #                - np.exp( -2 * theta[1]) / f0)
+
+    r = np.exp(r_num - r_denom)
+
+    return r, theta_star
+
+def main(theta, n = 10000):
+    """
+
+    """
+    theta_chain = np.empty((3,n))
+    theta_old = theta
+    theta_chain[:,0] = theta_old
+    accept = 0
+    for i in range(n):
+        r, theta_star  = compute_r(theta_old)
+        test = sp.rand(1)
+        if r > test:
+            theta_old = theta_star
+            accept += 1
+        else:
+            theta_old = theta_old
+        theta_chain[:,i] = theta_old
+    print 'acceptance rate = ', float(accept)/n
+
+    return theta_chain
