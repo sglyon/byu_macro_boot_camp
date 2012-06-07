@@ -74,19 +74,6 @@ def compute_r(theta):
             -1/2 * ((theta[0] - c0)/d0)**2 - np.exp(theta[2])/b0 \
                     - np.exp( -2 * theta[1]) / f0
 
-    #print np.exp(r_num)
-    #print np.exp(r_denom)
-
-    #r_num = np.product( g(w,theta_star)**y * (1 - g(w, theta_star))**(n - y))* \
-    #        np.exp(a0 * theta_star[2] - 2  * e0 * theta_star[1]) * \
-    #        np.exp(-1/2 * ((theta_star[0] - c0)/d0)**2 - np.exp(theta_star[2]/b0)
-    #                - np.exp( -2 * theta_star[1]) / f0)
-    #
-    #r_denom = np.product( g(w,theta)**y * (1 - g(w,theta))**(n - y)) * \
-    #        np.exp(a0 * theta[2] - 2 * e0 * theta[1]) * \
-    #        np.exp(-1/2 * ((theta[0] - c0) / d0) **2 - np.exp(theta[2] / b0)
-    #                - np.exp( -2 * theta[1]) / f0)
-
     r = np.exp(r_num - r_denom)
 
     return r, theta_star
