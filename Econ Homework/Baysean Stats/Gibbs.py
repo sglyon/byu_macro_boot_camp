@@ -2,6 +2,7 @@
 Created June 5, 2012
 
 Author: Spencer Lyon
+hi
 """
 import numpy as np
 import scipy as sp
