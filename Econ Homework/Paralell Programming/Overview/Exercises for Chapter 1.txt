@@ -1,0 +1,9 @@
+1.) MPI is a library of functions that facilitates the use of paralell
+    computing for routines writen in the main scientific languages.
+
+2.) OpenMP works on SMP systems, while MPI works on both SMP and distributed
+    memory systems.
+
+3.) mpi4py is an implementation of MPI. So is pympi.
+
+4.) The supercomputer as Open Mpi. 

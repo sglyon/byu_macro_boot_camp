@@ -1,0 +1,7 @@
+1.) Reduce will reduce all values on all processes to a single value on the root
+    process one at a time.
+    AllReduce will do the same thing as reduce, but it will pass the reduced
+    value to all processes.
+
+2.) Allreduce is faster than Reduce + Bcast because the Allreduce algorithm does
+    all of it in one step, whereas the Reduce + Bcast method takes two steps.
