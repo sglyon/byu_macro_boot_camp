@@ -48,7 +48,6 @@ def g(w, theta):
 
     return (np.exp(x) / (1 + np.exp(x))) ** m1
 
-
 def compute_r(theta):
     """
     This function implements the posterior distribution as derived at the
@@ -179,7 +178,6 @@ def main_8(theta_init, n=10000, burn=1000, call_from_other=False):
 
 
     return theta_chain, metrics
-
 
 def main_9(theta_init, n=10000, burn=1000):
     """
@@ -322,8 +320,6 @@ def main_9(theta_init, n=10000, burn=1000):
 
 
     return theta_chain, metrics
-
-
 
 def main_10(theta_init, n=10000, burn=1000, call_from_other=False):
     """
@@ -472,3 +468,5 @@ def main_10(theta_init, n=10000, burn=1000, call_from_other=False):
 
 
     return theta_chain, metrics
+
+
