@@ -1,7 +1,7 @@
 """
 Created June 5, 2012
 
-Author: Spencer Lyon
+Authors: Spencer Lyon and *Chase Coleman
 """
 from __future__ import division
 import numpy as np
@@ -180,6 +180,15 @@ def main_8(theta_init, n=10000, burn=1000, call_from_other=False):
 
     return theta_chain, metrics
 
+## Prepare new sigma matrix based on problem 8 solution.
+theta_c8, met8 = main_8(theta_init, call_from_other = True)
+theta_c8 = np.mat(theta_c8)
+
+th_bar = np.mat(np.mean(theta_c8, axis = 1))
+
+sig10_tilde = 1./theta_c8.shape[1]  * (theta_c8 - th_bar) *\
+                                      (theta_c8 - th_bar).T
+sig10 = sig10_tilde * 2.
 
 def main_9(theta_init, n=10000, burn=1000):
     """
@@ -236,17 +245,6 @@ def main_9(theta_init, n=10000, burn=1000):
 
         return r, theta_star
 
-    ## Prepare new sigma matrix based on problem 8 solution.
-    theta_c8, met8 = main_8(theta_init, call_from_other = True)
-    theta_c8 = np.mat(theta_c8)
-
-    th_bar = np.mat(np.mean(theta_c8, axis = 1))
-
-    sig9_tilde = 1./theta_c8.shape[1]  * (theta_c8 - th_bar) *\
-                                        (theta_c8 - th_bar).T
-    sig9 = sig9_tilde * 2.
-
-
     ## Generating the chains. The Metropolis algorithm in action.
     theta_chain = np.empty((3,n))
     theta_old = theta_init
@@ -254,7 +252,7 @@ def main_9(theta_init, n=10000, burn=1000):
     accept = 0
     test = 0
     for i in range(n):
-        r, theta_star  = compute_r9(theta_old, sig9)
+        r, theta_star  = compute_r9(theta_old, sig10)
         test = sp.rand(1)
         if r > test:
             theta_old = theta_star
@@ -385,18 +383,6 @@ def main_10(theta_init, n=10000, burn=1000, call_from_other=False):
         r = np.exp(r_num - r_denom)
 
         return r, theta_star
-
-    ## Prepare new sigma matrix based on problem 8 solution.
-    theta_c8, met8 = main_8(theta_init, call_from_other = True)
-    theta_c8 = np.mat(theta_c8)
-
-    th_bar = np.mat(np.mean(theta_c8, axis = 1))
-
-    sig10_tilde = 1./theta_c8.shape[1]  * (theta_c8 - th_bar) *\
-                                          (theta_c8 - th_bar).T
-    sig10 = sig10_tilde * 2.
-
-    print sig10
 
     ## Generating the chains. The Metropolis algorithm in action.
     theta_chain = np.empty((3,n))
