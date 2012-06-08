@@ -468,8 +468,3 @@ def main_10(theta_init, n=10000, burn=1000, call_from_other=False):
 
     return theta_chain, metrics
 
-def main_12():
-    """
-    This does problem 12
-    """
-    

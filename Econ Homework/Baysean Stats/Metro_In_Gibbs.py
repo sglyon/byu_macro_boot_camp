@@ -169,7 +169,7 @@ def MH_Gib(theta_init, N=10000, n=2000, burn=1000):
 
         theta_chain[2,i] = mini_MH([theta_chain[0, i],
                                     theta_chain[1, i],
-                                    theta_chain[2, i-1]], 1, n, burn)
+                                    theta_chain[2, i-1]], 2, n, burn)
         if i % 500 ==0:
             print 'Iteration', i
 
