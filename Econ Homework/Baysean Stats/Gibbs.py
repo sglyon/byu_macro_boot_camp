@@ -23,7 +23,7 @@ to_pass = np.vstack((y, t))
 def gibbs(obs, n=10000, burn=1000):
     """
     This function applies the Gibb's Sampling algorithm to the data passed in.
-    By default we will take 20000 monte carlo samples, drop the first 1000 (for
+    By default we will take 10000 monte carlo samples, drop the first 1000 (for
     the burn in) and then take every 200th entry after that. That leaves us with
     a sample with 95 entries.
 
@@ -38,6 +38,8 @@ def gibbs(obs, n=10000, burn=1000):
         obs: The data set over which you want to do the Gibbs sampling.
 
     Outputs:
+        bet: The (n-burn)x1 estimated beta chain.
+        thet: The (n-burn)x3 estiamted theta chain.
     """
     alpha = 0.7
     d = 1.0

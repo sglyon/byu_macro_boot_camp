@@ -62,7 +62,7 @@ def bandpass_filter(data, k, w1, w2):
     b_high = gen_b(k, high_w)[1]
 
     bweights = b_high - b_low
-    y = np.empty(data.size - 2*k - 1)
+    y = np.empty(data.size - 2*k-1)
     for i in range(k, y.size-k):
         y[i] = np.dot(bweights, data[i-k:i+k+1])
 
