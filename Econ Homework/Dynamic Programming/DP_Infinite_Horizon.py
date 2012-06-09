@@ -87,6 +87,7 @@ while theNorm > tol:
     theNorm = norm(vnew, vold)
 
 ## Problem 7
+# TODO: Do this again. Follow instructions this time.
 plt.plot(range(pnew.size), pnew)
 plt.title('Policy function')
 plt.show()

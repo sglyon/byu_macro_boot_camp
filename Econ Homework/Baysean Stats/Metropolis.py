@@ -320,6 +320,8 @@ def main_9(theta_init, n=10000, burn=1000):
 
     return theta_chain, metrics
 
+
+
 def main_10(theta_init, n=10000, burn=1000, call_from_other=False):
     """
     This function completes Problem 8 of the Bayes' HW set. It will do a
@@ -473,4 +475,3 @@ def main_10(theta_init, n=10000, burn=1000, call_from_other=False):
 
 
     return theta_chain, metrics
-

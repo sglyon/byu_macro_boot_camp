@@ -111,11 +111,7 @@ def compute_r(theta, element):
 
     return r, new_th_el
 
-<<<<<<< HEAD
-def mini_MH(theta, element, n, burn):
-=======
 def mini_MH(theta, element, n):
->>>>>>> met_in_Gibbs
     """
 
     """
@@ -123,22 +119,6 @@ def mini_MH(theta, element, n):
     mini_th_chain = np.empty(n)
     mini_th_chain[0] = theta_old[element]
 
-<<<<<<< HEAD
-    for i in range(n):
-        r, theta_star = compute_r(theta_old, element)
-        test = sp.rand(1)
-        if r > test:
-            theta_old[element] = theta_star
-        else:
-            theta_old[element] = theta_old[element]
-        mini_th_chain[i] = theta_old[element]
-
-    taking = np.random.randint(n-burn, n)
-
-    new_th_sample = mini_th_chain[taking]
-
-    return new_th_sample
-=======
     r, theta_star = compute_r(theta_old, element)
     test = sp.rand(1)
     if r > test:
@@ -149,7 +129,6 @@ def mini_MH(theta, element, n):
 
 
     return mini_th_chain
->>>>>>> met_in_Gibbs
 
 
 def MH_Gib(theta_init, N=10000, n=2000, burn=1000):
@@ -173,35 +152,11 @@ def MH_Gib(theta_init, N=10000, n=2000, burn=1000):
         ** means optional parameter.
     """
 
-<<<<<<< HEAD
-    theta_chain = np.empty((3, n))
-=======
     theta_chain = np.empty((3, N))
->>>>>>> met_in_Gibbs
     theta_old = theta_init
     theta_chain[:,0] = theta_old
 
     for i in range(1, N):
-<<<<<<< HEAD
-        theta_chain[0,i] = mini_MH(theta_chain[:,i-1], 0, n, burn)
-
-        theta_chain[1,i] = mini_MH([theta_chain[0, i],
-                                    theta_chain[1, i-1],
-                                    theta_chain[2, i-1]], 1, n, burn)
-
-        theta_chain[2,i] = mini_MH([theta_chain[0, i],
-                                    theta_chain[1, i],
-                                    theta_chain[2, i-1]], 2, n, burn)
-        if i % 500 ==0:
-            print 'Iteration', i
-
-    return theta_chain
-
-MH_Gib(theta_2)
-
-
-
-=======
         theta_chain[0,i] = mini_MH(theta_chain[:,i-1], 0, 1)
 
         theta_chain[1,i] = mini_MH([theta_chain[0, i],
@@ -266,4 +221,3 @@ MH_Gib(theta_2)
 
 
     return theta_chain, metrics
->>>>>>> met_in_Gibbs
