@@ -1,7 +1,7 @@
 """
 Created June 7, 2012
 
-Author: Spencer Lyon, Chase Coleman
+Authors: Spencer Lyon and *Chase Coleman
 """
 from __future__ import division
 import numpy as np
@@ -111,7 +111,11 @@ def compute_r(theta, element):
 
     return r, new_th_el
 
+<<<<<<< HEAD
 def mini_MH(theta, element, n, burn):
+=======
+def mini_MH(theta, element, n):
+>>>>>>> met_in_Gibbs
     """
 
     """
@@ -119,6 +123,7 @@ def mini_MH(theta, element, n, burn):
     mini_th_chain = np.empty(n)
     mini_th_chain[0] = theta_old[element]
 
+<<<<<<< HEAD
     for i in range(n):
         r, theta_star = compute_r(theta_old, element)
         test = sp.rand(1)
@@ -133,6 +138,18 @@ def mini_MH(theta, element, n, burn):
     new_th_sample = mini_th_chain[taking]
 
     return new_th_sample
+=======
+    r, theta_star = compute_r(theta_old, element)
+    test = sp.rand(1)
+    if r > test:
+        theta_old[element] = theta_star
+    else:
+        theta_old[element] = theta_old[element]
+    mini_th_chain[0] = theta_old[element]
+
+
+    return mini_th_chain
+>>>>>>> met_in_Gibbs
 
 
 def MH_Gib(theta_init, N=10000, n=2000, burn=1000):
@@ -156,11 +173,16 @@ def MH_Gib(theta_init, N=10000, n=2000, burn=1000):
         ** means optional parameter.
     """
 
+<<<<<<< HEAD
     theta_chain = np.empty((3, n))
+=======
+    theta_chain = np.empty((3, N))
+>>>>>>> met_in_Gibbs
     theta_old = theta_init
     theta_chain[:,0] = theta_old
 
     for i in range(1, N):
+<<<<<<< HEAD
         theta_chain[0,i] = mini_MH(theta_chain[:,i-1], 0, n, burn)
 
         theta_chain[1,i] = mini_MH([theta_chain[0, i],
@@ -179,3 +201,69 @@ MH_Gib(theta_2)
 
 
 
+=======
+        theta_chain[0,i] = mini_MH(theta_chain[:,i-1], 0, 1)
+
+        theta_chain[1,i] = mini_MH([theta_chain[0, i],
+                                    theta_chain[1, i-1],
+                                    theta_chain[2, i-1]], 1, 1)
+
+        theta_chain[2,i] = mini_MH([theta_chain[0, i],
+                                    theta_chain[1, i],
+                                    theta_chain[2, i-1]], 2, 1)
+        if i % 500 ==0:
+            print 'Iteration', i
+
+    ## Plot Stuff
+    hist_title = ['Histogram for $\ theta_1$',
+                  'Histogram for $\ theta_2$',
+                  'Histogram for $\ theta_3$']
+    plot_title =['Mointoring plot for $\ theta_1$',
+                 'Mointoring plot for $\ theta_2$',
+                 'Mointoring plot for $\ theta_3$']
+
+
+    for i in range(3):
+        pl.hist(theta_chain[i,:], bins = 15)
+        pl.title(hist_title[i])
+        pl.show()
+        pl.plot(range(theta_chain[i,:].size), theta_chain[i,:])
+        pl.title(plot_title[i])
+        pl.show()
+
+    # Separating out theta's
+    th1 = theta_chain[0,:]
+    th2 = theta_chain[1,:]
+    th3 = theta_chain[2,:]
+
+    # Creating lag 1 autocorrelations
+    corr_th1 = np.corrcoef(th1[1:], th1[:-1])[0,1]
+    corr_th2 = np.corrcoef(th2[1:], th2[:-1])[0,1]
+    corr_th3 = np.corrcoef(th3[1:], th3[:-1])[0,1]
+
+
+    print 'Correlation between th1, th2 = ', np.corrcoef(th1, th2)[0, 1]
+    print 'Correlation between th1, th3 = ', np.corrcoef(th1, th3)[0, 1]
+    print 'Correlation between th2, th3 = ', np.corrcoef(th2, th3)[0, 1]
+
+
+    # Computing quantiles
+    end_length = n - burn
+    quantiles = [round(end_length*.025),
+                 round(end_length*.5),
+                 round(end_length*.975)]
+
+    quan_th1 = np.sort(th1)[quantiles]
+    quan_th2 = np.sort(th2)[quantiles]
+    quan_th3 = np.sort(th3)[quantiles]
+
+    # Packaging metrics
+    met_th1 = [corr_th1, quan_th1]
+    met_th2 = [corr_th2, quan_th2]
+    met_th3 = [corr_th3, quan_th3]
+
+    metrics = [met_th1, met_th2, met_th3]
+
+
+    return theta_chain, metrics
+>>>>>>> met_in_Gibbs
