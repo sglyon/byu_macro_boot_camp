@@ -369,6 +369,10 @@ def main_10_input_c(theta_init, c, n=10000, burn=1000, call_from_other=False):
         """
 
         jump_theta = np.array([1.8, -4.0, -1.0], dtype = float)
+        print 'here'
+        print 'we'
+        print 'are'
+
 
         theta_star = np.random.multivariate_normal(jump_theta, sigma)
 
@@ -383,7 +387,10 @@ def main_10_input_c(theta_init, c, n=10000, burn=1000, call_from_other=False):
                 -1/2 * ((theta[0] - c0)/d0)**2 - np.exp(theta[2])/b0 \
                         - np.exp( -2 * theta[1]) / f0
 
+        print 'r_num = ', r_num
+        print 'r_denom =' , r_denom
         r = np.exp(r_num - r_denom)
+
 
         return r, theta_star
 
@@ -469,24 +476,24 @@ def main_10_input_c(theta_init, c, n=10000, burn=1000, call_from_other=False):
 def problem_12(algorithm, c_value):
     if algorithm == 9:
         main_9_input_c(theta_1, c_value)
-        print 'FINISHING FIRST CHAIN'
+        print 'FINISHED FIRST CHAIN'
         print '****************************\n****************************\n****************************\n****************************\n'
         main_9_input_c(theta_2, c_value)
-        print 'FINISHING SECOND CHAIN'
+        print 'FINISHED SECOND CHAIN'
         print '****************************\n****************************\n****************************\n****************************\n'
         main_9_input_c(theta_3, c_value)
-        print 'FINISHING THIRD CHAIN'
+        print 'FINISHED THIRD CHAIN'
         print '****************************\n****************************\n****************************\n****************************\n'
 
     elif algorithm == 10:
         main_10_input_c(theta_1, c_value)
-        print 'FINISHING FIRST CHAIN'
+        print 'FINISHED FIRST CHAIN'
         print '****************************\n****************************\n****************************\n****************************\n'
         main_10_input_c(theta_2, c_value)
-        print 'FINISHING SECOND CHAIN'
+        print 'FINISHED SECOND CHAIN'
         print '****************************\n****************************\n****************************\n****************************\n'
         main_10_input_c(theta_3, c_value)
-        print 'FINISHING THIRD CHAIN'
+        print 'FINISHED THIRD CHAIN'
         print '****************************\n****************************\n****************************\n****************************\n'
     else:
         print 'Error. Pick integers 9 or 10 for algorithm.'
