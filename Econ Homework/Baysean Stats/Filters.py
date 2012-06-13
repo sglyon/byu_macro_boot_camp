@@ -18,7 +18,7 @@ sp.set_printoptions(linewidth=140, suppress = True, precision = 5)
 def problem_1():
     """
     This function uses the file GPDIC96.txt as the data for this problem.
-    It produces the T, cycle sets and plots what Ben asked for
+    It produces the T, cycle sets and plots what Ben asked for in 1.d.
     """
     data = sp.loadtxt('GPDIC96.txt', skiprows=1, dtype=float,
                       converters={0:pylab.datestr2num})

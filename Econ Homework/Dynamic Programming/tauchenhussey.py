@@ -3,7 +3,7 @@ import scipy as sp
 
 
 def tauchenhussey(N,mu,rho,sigma, baseSigma):
-	""" 
+	"""
 	Function tauchenhussey
 
 	Purpose:    Finds a Markov chain whose sample paths
@@ -34,7 +34,7 @@ def tauchenhussey(N,mu,rho,sigma, baseSigma):
 	This procedure is an implementation of Tauchen and Hussey's
 	algorithm, Econometrica (1991, Vol. 59(2), pp. 371-396)
 	"""
-	
+
 	Z     = sp.zeros((N,1))
 	Zprob = sp.zeros((N,N))
 	[Z,w] = gaussnorm(N,mu,baseSigma**2)
@@ -42,15 +42,15 @@ def tauchenhussey(N,mu,rho,sigma, baseSigma):
 		for j in range(N):
 			EZprime    = (1-rho)*mu + rho*Z[i]
 			Zprob[i,j] = w[j] * st.norm.pdf(Z[j],EZprime,sigma) / st.norm.pdf(Z[j],mu,baseSigma)
-		
+
 	for i in range(N):
 		Zprob[i,:] = Zprob[i,:] / sum(Zprob[i,:])
-		
+
 	return Z.T,Zprob
 
 
 def gaussnorm(n,mu,s2):
-	""" 
+	"""
 	Find Gaussian nodes and weights for the normal distribution
 	n  = # nodes
 	mu = mean
@@ -58,15 +58,13 @@ def gaussnorm(n,mu,s2):
 	"""
 	[x0,w0] = gausshermite(n)
 	x = x0*sp.sqrt(2.*s2) + mu
-	print s2,mu
-	print x
 	w = w0/sp.sqrt(sp.pi)
 	return [x,w]
 
-	
+
 def gausshermite(n):
 	"""
-	Gauss Hermite nodes and weights following 'Numerical Recipes for C' 
+	Gauss Hermite nodes and weights following 'Numerical Recipes for C'
 	"""
 
 	MAXIT = 10
@@ -88,7 +86,7 @@ def gausshermite(n):
 			z = 1.91*z - 0.91*x[1]
 		else:
 			z = 2*z - x[i-1]
-		
+
 		for iter in range(MAXIT):
 			p1 = PIM4
 			p2 = 0.
@@ -101,13 +99,13 @@ def gausshermite(n):
 			z = z1 - p1/pp
 			if sp.absolute(z-z1) <= EPS:
 				break
-		
+
 		if iter>MAXIT:
 			error('too many iterations'), end
 		x[i,0]     = z
 		x[n-i-1,0] = -z
 		w[i,0]     = 2./pp/pp
 		w[n-i-1,0] = w[i]
-	
+
 	x = x[::-1]
 	return [x,w]

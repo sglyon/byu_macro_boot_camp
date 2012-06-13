@@ -88,6 +88,10 @@ while theNorm > tol:
 
 ## Problem 7
 # TODO: Do this again. Follow instructions this time.
-plt.plot(range(pnew.size), pnew)
+plt.plot(np.arange(pnew.size)[1:], pnew[1:])
 plt.title('Policy function')
+plt.show()
+
+plt.plot(np.arange(vnew.size)[1:], vnew[1:])
+plt.title('Value function')
 plt.show()

@@ -4,10 +4,10 @@ Created June 8, 2012
 Author: Spencer Lyon
 """
 import numpy as np
-import scipy as sp
-import scipy.stats as st
-import tauchenhussey as th
 import discretenorm as dn
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
 
 def my_max(array, axis=1):
     """
@@ -116,6 +116,12 @@ while theNorm > tol:
 
 ## --------------------------------Problem 7--------------------------------- ##
 # TODO. Make the plot look pretty.
+X, Y = np.meshgrid(eps[1:], w[1:])
+fig = plt.figure()
+ax = fig.add_subplot(111, projection = '3d')
 
-
-
+surface = ax.plot_surface(X, Y, pnew[1:,1:], rstride = 1, cstride = 1)
+plt.title('Policy Function')
+ax.set_xlabel('Taste Shock')
+ax.set_ylabel('Cake Today')
+plt.show()

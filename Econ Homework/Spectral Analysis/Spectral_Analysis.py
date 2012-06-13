@@ -153,8 +153,8 @@ def problem_8():
                force the w = 0 frequency to be completely filtered out.
         """
         # Getting the a_h and b_h coefficients
-        low_w = np.pi * 2 / 32
-        high_w = np.pi * 2 / 6
+        low_w = np.pi * 2 / 32 # was w2 in previous filter.
+        high_w = np.pi * 2 / 6 # was w1 in previous filter.
 
         b_low, a_low = bpf.gen_b(k, low_w)
         b_high, a_high = bpf.gen_b(k, high_w)
@@ -339,7 +339,23 @@ def problem_10():
 
     all_data = np.vstack([all_gdp, all_cpi, all_cons, all_inv])
 
+
     all_tables = np.empty((4, 4, 3))
+
+    data_titles = ['GDP', "CPI", 'Consumption', 'Investment']
+    filter_labels = ['First Diff', 'HP', 'BP']
+
+
+    for data_set in range(all_data.shape[0]):
+        plt.figure()
+        for filt in range(all_data.shape[1]):
+            plt.plot(
+                range(all_data[data_set, filt].size),
+                all_data[data_set,filt],
+                label = filter_labels[filt])
+        plt.title(data_titles[data_set])
+        plt.legend(loc=0)
+        plt.show()
 
 
     for data_set in range(all_data.shape[0]):
@@ -370,3 +386,5 @@ def problem_10():
         print pretty_all[tab]
 
     return pretty_all
+
+problem_10()
