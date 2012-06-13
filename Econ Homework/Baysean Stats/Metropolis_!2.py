@@ -464,3 +464,36 @@ def main_10_input_c(theta_init, c, n=10000, burn=1000, call_from_other=False):
 
 
     return theta_chain, metrics
+
+
+def problem_12(algorithm, c_value):
+    if algorithm == 9:
+        main_9_input_c(theta_1, c_value)
+        print 'FINISHING FIRST CHAIN'
+        print '****************************\n****************************\n****************************\n****************************\n'
+        main_9_input_c(theta_2, c_value)
+        print 'FINISHING SECOND CHAIN'
+        print '****************************\n****************************\n****************************\n****************************\n'
+        main_9_input_c(theta_3, c_value)
+        print 'FINISHING THIRD CHAIN'
+        print '****************************\n****************************\n****************************\n****************************\n'
+
+    elif algorithm == 10:
+        main_10_input_c(theta_1, c_value)
+        print 'FINISHING FIRST CHAIN'
+        print '****************************\n****************************\n****************************\n****************************\n'
+        main_10_input_c(theta_2, c_value)
+        print 'FINISHING SECOND CHAIN'
+        print '****************************\n****************************\n****************************\n****************************\n'
+        main_10_input_c(theta_3, c_value)
+        print 'FINISHING THIRD CHAIN'
+        print '****************************\n****************************\n****************************\n****************************\n'
+    else:
+        print 'Error. Pick integers 9 or 10 for algorithm.'
+
+#problem_12(9,1.)
+#problem_12(9,4.)
+#problem_12(9,1/4.)
+#problem_12(10,1.)
+#problem_12(10,4.)
+#problem_12(10,1/4.)

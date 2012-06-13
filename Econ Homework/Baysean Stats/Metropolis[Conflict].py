@@ -3,6 +3,7 @@ Created June 5, 2012
 
 Author: Spencer Lyon
 """
+from __future__ import division
 import numpy as np
 import scipy as sp
 import scipy.stats as st
@@ -18,7 +19,7 @@ b0= 4.
 c0 = 2.
 d0 = 10.
 e0 = 2.000004
-f0 = 1000.
+f0 = 1000
 
 sig = np.diag([0.00012, 0.033, 0.10])
 
@@ -369,12 +370,12 @@ def main_10(theta_init, n=10000, burn=1000, call_from_other=False):
         # Taking the log before I calculate h(theta) [numerical precision errors].
         r_num = np.sum( y * np.log(g(w,theta_star)) + (n-y) * np.log((1 - g(w, theta_star)))) + \
                 a0 * theta_star[2] - 2  * e0 * theta_star[1] + \
-                -1./2 * ((theta_star[0] - c0)/d0)**2 - np.exp(theta_star[2])/b0 \
+                -1/2 * ((theta_star[0] - c0)/d0)**2 - np.exp(theta_star[2])/b0 \
                         - np.exp( -2 * theta_star[1]) / f0
 
         r_denom = np.sum( y * np.log(g(w,theta)) + (n-y) * np.log((1 - g(w, theta)))) + \
                 a0 * theta[2] - 2  * e0 * theta[1] + \
-                -1./2 * ((theta[0] - c0)/d0)**2 - np.exp(theta[2])/b0 \
+                -1/2 * ((theta[0] - c0)/d0)**2 - np.exp(theta[2])/b0 \
                         - np.exp( -2 * theta[1]) / f0
 
         r = np.exp(r_num - r_denom)
@@ -467,3 +468,4 @@ def main_10(theta_init, n=10000, burn=1000, call_from_other=False):
 
 
     return theta_chain, metrics
+

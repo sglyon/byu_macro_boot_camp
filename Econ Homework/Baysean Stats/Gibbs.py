@@ -8,6 +8,7 @@ import numpy as np
 import scipy as sp
 import scipy.stats as st
 import pylab
+from prettytable import PrettyTable as pt
 
 sp.set_printoptions(linewidth=140, suppress = True, precision = 5)
 
@@ -68,15 +69,40 @@ def gibbs(obs, n=10000, burn=1000):
 
     return [bet, thet]
 
-def gen_plots(theta_ind):
+def moments(beta, theta):
     """
-    This function generates a quick plot of the beta MC chain as well as the
-    a histogram of its distribution. It does the same for the specified element
-    of theta.
+    This funciton takes the output from the gibbs function and computes the
+    95% credible interval and median for each chain.
 
     Inputs:
-        theta_ind: The theta (element of range 1 to 10) that you want to
-                   visualize.
+        beta: this is an nx1 vector of values for beta.
+        theta: This is an nx3 vector of values for each of the 3 theta params.
+
+    Returns:
+        Just prints out the desired moments.
+    """
+    column_titles = ['Beta', "Theta_1", 'Theta_2', 'Theta_3',
+                     "Theta_4", 'Theta_5', 'Theta_6',
+                     "Theta_7", 'Theta_8', 'Theta_9', 'Theta_10']
+
+    all_params = np.hstack((beta, theta))
+    all_sort = np.sort(all_params, axis=1)
+    items = all_sort[:,0].size
+    chop = round(items * 0.025)
+
+    table = np.empty((2,11))
+    for param in range(all_params.shape[1]):
+        print column_titles[param] ,' Confidence Interval',\
+                            [all_sort[chop, param], all_sort[-chop, param]]
+        print column_titles[param], 'Mean', np.mean(all_params[:,param]), '\n'
+
+def gen_plots():
+    """
+    This function generates a quick plot of the beta MC chain as well as the
+    a histogram of its distribution. It does the same for each theta.
+
+    Inputs:
+        None
 
     Outputs:
         None: This funciton automaticlly generates and shows all plots.
@@ -85,14 +111,23 @@ def gen_plots(theta_ind):
     beta, theta = gibbs(to_pass)
 
     pylab.hist(beta, bins = 40)
+    pylab.title('Beta histogram')
     pylab.show()
     pylab.plot(range(beta.size), beta)
     pylab.title('Beta chain')
     pylab.show()
-    pylab.hist(theta[:, theta_ind], bins = 40)
-    pylab.show()
-    pylab.plot(range(theta[:, theta_ind].size), theta[:,theta_ind])
-    pylab.title('Theta chain')
-    pylab.show()
+
+
+    titles = ["Theta_1", 'Theta_2', 'Theta_3',
+                     "Theta_4", 'Theta_5', 'Theta_6',
+                     "Theta_7", 'Theta_8', 'Theta_9', 'Theta_10']
+
+    for theta_ind in range(10):
+        pylab.hist(theta[:, theta_ind], bins = 40)
+        pylab.title('Histogram for ' + titles[theta_ind])
+        pylab.show()
+        pylab.plot(range(theta[:, theta_ind].size), theta[:,theta_ind])
+        pylab.title('Chain for ' + titles[theta_ind])
+        pylab.show()
 
     return

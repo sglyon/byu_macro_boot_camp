@@ -386,5 +386,3 @@ def problem_10():
         print pretty_all[tab]
 
     return pretty_all
-
-problem_10()
