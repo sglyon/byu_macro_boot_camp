@@ -79,6 +79,15 @@ for i in range(N):
 
 util_mat = np.log(c_mat)
 
+changes = 0
+for j in range(util_mat.shape[1]):
+    for i in range(util_mat.shape[0]):
+        for k in range(util_mat.shape[2]):
+            if k >= i:
+                util_mat[i,j,k] = -10e20
+                changes +=1
+print changes
+
 # Create value function matrix. v(w', e')
 vtp1 = np.zeros((N,nodes))
 
@@ -138,14 +147,15 @@ while theNorm > tol:
     vnew, pnew = do_iteration(vold)
     theNorm = my_norm(vnew, vold)
     iterations += 1
-print '\nDone!\nCurrent value of delta =', theNorm
+print '\nDone!\n After %.2f iterations the current value of delta = %f'\
+                                                % (iterations, theNorm)
 
 ## --------------------------------Problem 7--------------------------------- ##
-X, Y = np.meshgrid(support[1:], w[1:])
+X, Y = np.meshgrid(support, w)
 fig = plt.figure()
 ax = fig.add_subplot(111, projection ='3d')
 
-surface = ax.plot_surface(X, Y, pnew[1:,1:], rstride = 1, cstride = 1)
+surface = ax.plot_surface(X, Y, pnew, rstride = 1, cstride = 1)
 plt.title('Policy Function')
 ax.set_xlabel('Taste Shock')
 ax.set_ylabel('Cake Today')
