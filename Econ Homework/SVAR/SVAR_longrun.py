@@ -7,9 +7,7 @@ import numpy as np
 from sympy import symbols, nsolve
 import numpy.linalg as npla
 import matplotlib.pyplot as plt
-from scipy import interpolate
 import scipy as sp
-import scipy.stats as st
 
 nans, GDP, Unem = np.genfromtxt('RGDPU.txt', skip_header=1,unpack=True)
 
@@ -17,7 +15,7 @@ nans, GDP, Unem = np.genfromtxt('RGDPU.txt', skip_header=1,unpack=True)
 GDP_rate = GDP[:-1] - GDP[1:]
 
 # We took all but the last entry in Unem to preserve dimensions among it and GDP
-y = np.vstack((Unem[0:-1], GDP_rate))
+y = np.vstack((GDP_rate, Unem[0:-1]))
 
 def lag_op(y, nlag):
     """
@@ -52,37 +50,39 @@ X = np.vstack([const_row, lagged])
 
 # This beta will be 2 x 17. The first column is the constant terms.
 Beta = np.dot(np.dot(no_lag, X.T), npla.inv(np.dot(X, X.T)))
-
-# We now find the predicted y values so we can find the residuals.
-Y_hat = np.dot(X.T, Beta.T).T
-resid = no_lag - Y_hat
-sigma = np.cov(resid) # This is the sigma we will use to find A_0 inverse.
-print sigma
-
-## Solving for A_0_inv
-# Applying short run restrictions means that A_0 inv. will have no (1,2) entry.
-# We will be left with sigma = [[a11**2, 0], [a11*a22, a21**2 + a22**2]]
-# We solve this equation symbolically below.
-a11, a21, a22 = symbols(['a11', 'a21', 'a22'])
-f1 = a11**2 - sigma[0,0]
-f2 = a11*a21 - sigma[1,0]
-f3 = a21**2 + a22**2 - sigma[1,1]
-AoInvSol = nsolve((f1,f2,f3),(a11,a21,a22),(.5,-.5,.5))
-A_0_inv = sp.matrix([[0.,0.],[0.,0.]])
-A_0_inv[0,0] = AoInvSol[0]
-A_0_inv[1,0] = AoInvSol[1]
-A_0_inv[1,1] = AoInvSol[2]
-print A_0_inv
-A_0 = npla.inv(A_0_inv)
-
-## Solving for D matricies
-# Stack betas for easy D creation
 bet = Beta[:,1:]
 B1, B2, B3, B4, B5, B6, B7, B8 =\
         [np.mat(bet[:,0:2]), np.mat(bet[:,2:4]), np.mat(bet[:,4:6]),
          np.mat(bet[:,6:8]), np.mat(bet[:,8:10]), np.mat(bet[:,10:12]),
          np.mat(bet[:,12:14]), np.mat(bet[:,14:16])]
 
+# We now find the predicted y values so we can find the residuals.
+Y_hat = np.dot(Beta, X)
+resid = no_lag - Y_hat
+sigma = np.cov(resid) # This is the sigma we will use to find A_0 inverse.
+
+
+## Solve for D(1) and then C(1)
+# Solve for D(1)
+B_1 = np.eye(2) - B1 - B2 - B3 - B4 - B5 - B6 - B7 - B8
+D_1 = npla.inv(B_1)
+
+#Solve symbolically for C_1
+c11, c21, c22 = symbols(['c1', 'c2', 'c3'])
+C_12 =  np.dot(np.dot(D_1, sigma),D_1.T)
+g1 = c11**2 - C_12[0,0]
+g2 = c11*c21 - C_12[1,0]
+g3 = c21**2 + c22**2 - C_12[1,1]
+c_1_sol =  nsolve((g1,g2,g3),(c11,c21,c22),(-.03,.113,-.3))
+C_1 = np.empty([2,2])
+C_1[0,0] = c_1_sol[0]
+C_1[1,0] = c_1_sol[1]
+C_1[1,1] = c_1_sol[2]
+
+
+## Compute A_0_inv and A_0
+A_0_inv = np.dot(npla.inv(D_1), C_1)
+A_0 = npla.inv(A_0_inv)
 
 ## Create D matricies
 D0 = np.mat(np.eye(n_vars))
@@ -120,29 +120,29 @@ for i in range(c_ind):
 
 c_array = np.array(big_C)
 
-IRF_U_AS = np.hstack((0,c_array[:,0,0]))
-IRF_U_AD = np.hstack((0,c_array[:,0,1]))
-IRF_GDP_AS = np.hstack((0, np.cumsum(c_array[:,1,0])))
-IRF_GDP_AD = np.hstack((0, np.cumsum(c_array[:,1,1])))
+IRF_U_AS = np.hstack((0,np.cumsum(c_array[:,0,0])))
+IRF_U_AD = np.hstack((0,np.cumsum(c_array[:,0,1])))
+IRF_GDP_AS = np.hstack((0, c_array[:,1,0]))
+IRF_GDP_AD = np.hstack((0, c_array[:,1,1]))
 
 x = np.linspace(0,41,42)
 
 plt.figure()
-plt.title('Short run IRF of Unemployment to Aggregate Supply Shock')
+plt.title('Long run IRF of Unemployment to Aggregate Supply Shock')
 plt.plot(range(IRF_U_AS.size), IRF_U_AS)
 plt.show()
 
 plt.figure()
-plt.title('Short run IRF of Unemployment to Aggregate Demand Shock')
+plt.title('Long run IRF of Unemployment to Aggregate Demand Shock')
 plt.plot(range(IRF_U_AD.size), IRF_U_AD)
 plt.show()
 
 plt.figure()
-plt.title('Short run IRF of GDP to Aggregate Supply Shock')
+plt.title('Long run IRF of GDP to Aggregate Supply Shock')
 plt.plot(range(IRF_GDP_AS.size), IRF_GDP_AS)
 plt.show()
 
 plt.figure()
-plt.title('Short run IRF of GDP to Aggregate Demand Shock')
+plt.title('Long run IRF of GDP to Aggregate Demand Shock')
 plt.plot(range(IRF_GDP_AD.size), IRF_GDP_AD)
 plt.show()
