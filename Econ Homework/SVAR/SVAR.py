@@ -63,6 +63,7 @@ Y_hat = np.dot(X.T, Beta.T).T
 resid = no_lag - Y_hat
 
 sigma = np.cov(resid) # This is the sigma we will use to find A_0 inverse.
+print sigma
 
 # Applying short run restrictions means that A_0 inv. will have no (2,1) entry.
 # We will be left with [[a11**2, a21**2], [0, a22**2]]
@@ -70,21 +71,42 @@ sigma = np.cov(resid) # This is the sigma we will use to find A_0 inverse.
 A_0_inv = np.array([[np.sqrt(sigma[0,0]), np.sqrt(sigma[0,1])],
                     [0                  , np.sqrt(sigma[1,1])]])
 
-def get_D(Beta, nlag):
-    """
-    This function applies the following recursion to get the the D matricies:
-        D_i = Sum[Beta_i * D_(j-i), {i,1,nlag}] j=1,2,,... and D_j = 0 if j < i
+bet = Beta[:,1:]
+betas = [np.mat(bet[:,0:2]), np.mat(bet[:,2:4]), np.mat(bet[:,4:6]),
+         np.mat(bet[:,6:8]), np.mat(bet[:,8:10]), np.mat(bet[:,10:12]),
+         np.mat(bet[:,12:14]), np.mat(bet[:,14:16])]
+n_vars = bet.shape[0]
 
-    Inputs:
-        Beta: This is the beta matrix that was found from the reduced form VAR.
-              Note: Do not remove the constant column at the front of beta.
-        nlag: The number of lags that were used in the VAR.
+#big_D = []
+#D0 = np.mat(np.eye(n_vars))
+#big_D.append(D0)
+#
+#practice_D = [D0]
+#
+#for j in range(0,8):
+#    new_D =np.mat(np.zeros([2,2]))
+#    for i in range(0, 8):
+#        if j >= i:
+#            new_D += betas[j] * big_D[-i]
+#    big_D.append(new_D)
 
-    Outputs:
-        big_D: All the D matricies in a list next to one another.
-    """
-    big_D = []
-    n_vars = Beta.shape[0]
-    bet = Beta[:,1:]
-    D0 = np.eye(n_vars)
-    big_D.append(D0)
+D0 = np.mat(np.eye(n_vars))
+D1 = betas[0]*D0
+D2 = betas[0]*D1 + betas[1]*D0
+D3 = betas[0]*D2 + betas[1]*D1 + betas[2]*D0
+D4 = betas[0]*D3 + betas[1]*D2 + betas[2]*D1 + betas[3]*D0
+D5 = betas[0]*D4 + betas[1]*D3 + betas[2]*D2 + betas[3]*D1 + betas[4]*D0
+D6 = betas[0]*D5 + betas[1]*D4 + betas[2]*D3 + betas[3]*D2 + betas[4]*D1\
+                 + betas[5]*D0
+D7 = betas[0]*D6 + betas[1]*D5 + betas[2]*D4 + betas[3]*D3 + betas[4]*D2\
+                 + betas[5]*D1 + betas[6]*D0
+D8 = betas[0]*D7 + betas[1]*D6 + betas[2]*D5 + betas[3]*D4 + betas[4]*D3\
+                 + betas[5]*D2 + betas[6]*D1 + betas[7]*D0
+
+practice_D = [D0, D1, D2, D3, D4, D5, D6, D7, D8]
+
+A_0 = npla.inv(A_0_inv)
+
+
+
+
