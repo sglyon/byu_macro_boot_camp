@@ -3,6 +3,7 @@ Created June 8, 2012
 
 Authors: Spencer Lyon and Chase Coleman
 """
+from __future__ import division
 import numpy as np
 import scipy as sp
 import scipy.stats as st
@@ -333,7 +334,7 @@ def main_10_input_c(theta_init, c, n=10000, burn=1000, call_from_other=False):
     and report various parameters.
 
     Inputs:
-        theta_init: The theta vector that starts off the process.
+        theta_init: The theta 3x1 vector that starts off the process.
         **n: The number of iterations to be done in the algorithm.
         **burn: The number of elements in the final MC Chain that should be
                 thrown out to account for the "burn-in".
@@ -369,10 +370,6 @@ def main_10_input_c(theta_init, c, n=10000, burn=1000, call_from_other=False):
         """
 
         jump_theta = np.array([1.8, -4.0, -1.0], dtype = float)
-        print 'here'
-        print 'we'
-        print 'are'
-
 
         theta_star = np.random.multivariate_normal(jump_theta, sigma)
 
@@ -387,15 +384,19 @@ def main_10_input_c(theta_init, c, n=10000, burn=1000, call_from_other=False):
                 -1/2 * ((theta[0] - c0)/d0)**2 - np.exp(theta[2])/b0 \
                         - np.exp( -2 * theta[1]) / f0
 
-        print 'r_num = ', r_num
-        print 'r_denom =' , r_denom
         r = np.exp(r_num - r_denom)
-
 
         return r, theta_star
 
-    sig_tilde = get_sig(theta_init)
-    sig = sig_tilde * c
+    ## Prepare new sigma matrix based on problem 8 solution.
+    theta_c8, met8 = main_8(theta_init, call_from_other = True)
+    theta_c8 = np.mat(theta_c8)
+
+    th_bar = np.mat(np.mean(theta_c8, axis = 1))
+
+    sig10_tilde = 1./theta_c8.shape[1]  * (theta_c8 - th_bar) *\
+                                          (theta_c8 - th_bar).T
+    sig10 = sig10_tilde * float(c)
 
     ## Generating the chains. The Metropolis algorithm in action.
     theta_chain = np.empty((3,n))
@@ -403,7 +404,7 @@ def main_10_input_c(theta_init, c, n=10000, burn=1000, call_from_other=False):
     theta_chain[:,0] = theta_old
     accept = 0
     for i in range(n):
-        r, theta_star  = compute_r10(theta_old, sig)
+        r, theta_star  = compute_r10(theta_old, sig10)
         test = sp.rand(1)
         if r > test:
             theta_old = theta_star
@@ -474,6 +475,14 @@ def main_10_input_c(theta_init, c, n=10000, burn=1000, call_from_other=False):
 
 
 def problem_12(algorithm, c_value):
+    """
+    Inputs:
+        algorithm: An integer representing the problem from which the algorithm
+                   will be used.This will be either the integer 9 or the integer
+                   10.
+        c_value: The constant (scalar) that shall multiply the covariance matrix
+                 from the solution to problem 8 [Br. asked for c = 1 and c = 4].
+    """
     if algorithm == 9:
         main_9_input_c(theta_1, c_value)
         print 'FINISHED FIRST CHAIN'

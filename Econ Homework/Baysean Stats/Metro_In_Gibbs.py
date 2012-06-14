@@ -173,9 +173,9 @@ def MH_Gib(theta_init, N=10000, n=2000, burn=1000):
     hist_title = ['Histogram for $\ theta_1$',
                   'Histogram for $\ theta_2$',
                   'Histogram for $\ theta_3$']
-    plot_title =['Mointoring plot for $\ theta_1$',
-                 'Mointoring plot for $\ theta_2$',
-                 'Mointoring plot for $\ theta_3$']
+    plot_title =['Monitoring plot for $\ theta_1$',
+                 'Monitoring plot for $\ theta_2$',
+                 'Monitoring plot for $\ theta_3$']
 
 
     for i in range(3):

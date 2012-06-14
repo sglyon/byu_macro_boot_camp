@@ -87,7 +87,7 @@ def main_8(theta_init, n=10000, burn=1000, call_from_other=False):
     and report various parameters.
 
     Inputs:
-        theta_init: The theta vector that starts off the process.
+        theta_init: The theta 3x1 vector that starts off the process.
         **n: The number of iterations to be done in the algorithm.
         **burn: The number of elements in the final MC Chain that should be
                 thrown out to account for the "burn-in".
@@ -123,9 +123,9 @@ def main_8(theta_init, n=10000, burn=1000, call_from_other=False):
     hist_title = ['Histogram for $\ theta_1$',
                   'Histogram for $\ theta_2$',
                   'Histogram for $\ theta_3$']
-    plot_title =['Mointoring plot for $\ theta_1$',
-                 'Mointoring plot for $\ theta_2$',
-                 'Mointoring plot for $\ theta_3$']
+    plot_title =['Monitoring plot for $\ theta_1$',
+                 'Monitoring plot for $\ theta_2$',
+                 'Monitoring plot for $\ theta_3$']
 
     if call_from_other==False:
         for i in range(3):
@@ -186,7 +186,7 @@ def main_9(theta_init, n=10000, burn=1000):
     and report various parameters.
 
     Inputs:
-        theta_init: The theta vector that starts off the process.
+        theta_init: The theta 3x1 vector that starts off the process.
         **n: The number of iterations to be done in the algorithm.
         **burn: The number of elements in the final MC Chain that should be
                 thrown out to account for the "burn-in".
@@ -235,6 +235,9 @@ def main_9(theta_init, n=10000, burn=1000):
         return r, theta_star
 
     ## Prepare new sigma matrix based on problem 8 solution.
+    # This is the standard covariance matrix defined by the equation
+    #S = 1/G*sum((theta_1 - theta_bar) * I * (theta_i * theta_bar)', {i, 1, G})
+
     theta_c8, met8 = main_8(theta_init, call_from_other = True)
     theta_c8 = np.mat(theta_c8)
 
@@ -328,7 +331,7 @@ def main_10(theta_init, n=10000, burn=1000, call_from_other=False):
     and report various parameters.
 
     Inputs:
-        theta_init: The theta vector that starts off the process.
+        theta_init: The theta 3x1 vector that starts off the process.
         **n: The number of iterations to be done in the algorithm.
         **burn: The number of elements in the final MC Chain that should be
                 thrown out to account for the "burn-in".

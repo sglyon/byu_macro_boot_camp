@@ -92,9 +92,13 @@ def moments(beta, theta):
 
     table = np.empty((2,11))
     for param in range(all_params.shape[1]):
-        print column_titles[param] ,' Confidence Interval',\
-                            [all_sort[chop, param], all_sort[-chop, param]]
-        print column_titles[param], 'Mean', np.mean(all_params[:,param]), '\n'
+        print column_titles[param], 'Mean', np.mean(all_params[:,param])
+        print column_titles[param], 'Median', np.median(all_params[:,param])
+        print column_titles[param], 'Standard Deviation',\
+                                    np.std(all_params[:,param])
+
+        print column_titles[param] ,' Credible Set',\
+                            [all_sort[chop, param], all_sort[-chop, param]], '\n'
 
 def gen_plots():
     """
