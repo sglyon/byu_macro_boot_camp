@@ -9,6 +9,8 @@ import scipy as sp
 import tauchenhussey as th
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
 sp.set_printoptions(linewidth=140, suppress = True, precision = 5)
 
 # Parameters
@@ -57,9 +59,8 @@ nodes = 7
 sigma = 1/2.
 mu = 4 * sigma
 rho = 1/2.
-base_sigma = (0.5 + rho/4.0) * sigma + (0.5 - rho/4.0) * sigma/(np.sqrt(1 - rho**2))
+base_sigma = (0.5 + rho/4.0) * sigma + (0.5 - rho/4.0) * (sigma/(np.sqrt(1 - rho**2)))
 support, p_mat = th.tauchenhussey(nodes, mu, rho, sigma, base_sigma)
-support = support.flatten()
 p_cube = np.reshape(p_mat, (nodes, nodes, 1))
 p_cube = np.tile(p_cube, (1, 1, N))
 
@@ -72,7 +73,7 @@ c_mat = np.empty((N, nodes, N))
 for i in range(N):
     for j in range(nodes):
         for k in range(N):
-            if w[i] - w[k] > 0:
+            if w[i] - w[k] >= 0:
                 c_mat[i,j,k] = support[j] * (w[i] - w[k])
             else:
                 c_mat[i, j, k] = 10e-10
@@ -147,6 +148,7 @@ while theNorm > tol:
     vnew, pnew = do_iteration(vold)
     theNorm = my_norm(vnew, vold)
     iterations += 1
+<<<<<<< Updated upstream
 print '\nDone!\n After %.2f iterations the current value of delta = %f'\
                                                 % (iterations, theNorm)
 
@@ -156,6 +158,17 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection ='3d')
 
 surface = ax.plot_surface(X, Y, pnew, rstride = 1, cstride = 1)
+=======
+print '\nDone!\nCurrent value of delta after %.2f iterations is = %f' %\
+       (iterations, theNorm)
+
+## --------------------------------Problem 7--------------------------------- ##
+X, Y = np.meshgrid(support[2:], w[2:])
+fig = plt.figure()
+ax = fig.add_subplot(111, projection ='3d')
+
+surface = ax.plot_surface(X, Y, pnew[2:,2:], rstride = 1, cstride = 1)
+>>>>>>> Stashed changes
 plt.title('Policy Function')
 ax.set_xlabel('Taste Shock')
 ax.set_ylabel('Cake Today')

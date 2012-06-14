@@ -46,7 +46,7 @@ def tauchenhussey(N,mu,rho,sigma, baseSigma):
 	for i in range(N):
 		Zprob[i,:] = Zprob[i,:] / sum(Zprob[i,:])
 
-	return Z.T,Zprob
+	return Z, Zprob
 
 
 def gaussnorm(n,mu,s2):

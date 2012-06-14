@@ -116,11 +116,11 @@ while theNorm > tol:
 
 ## --------------------------------Problem 7--------------------------------- ##
 # TODO. Make the plot look pretty.
-X, Y = np.meshgrid(eps[1:], w[1:])
+X, Y = np.meshgrid(eps[2:], w[2:])
 fig = plt.figure()
 ax = fig.add_subplot(111, projection = '3d')
 
-surface = ax.plot_surface(X, Y, pnew[1:,1:], rstride = 1, cstride = 1)
+surface = ax.plot_surface(X, Y, pnew[2:,2:], rstride = 1, cstride = 1)
 plt.title('Policy Function')
 ax.set_xlabel('Taste Shock')
 ax.set_ylabel('Cake Today')
