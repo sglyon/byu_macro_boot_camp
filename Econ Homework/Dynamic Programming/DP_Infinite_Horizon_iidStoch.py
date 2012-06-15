@@ -111,7 +111,6 @@ while theNorm > tol:
     vnew, pnew = my_max(util_mat + beta * Ev_mat_new, axis = 2)
     theNorm = my_norm(vnew, vold)
     iterations += 1
-    print iterations
 
 
 ## --------------------------------Problem 7--------------------------------- ##

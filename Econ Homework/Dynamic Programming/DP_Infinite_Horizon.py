@@ -43,8 +43,6 @@ def my_max(array, axis=1):
     return np.array([np.max(array, axis=axis), np.argmax(array, axis=axis)])
 
 vt, polt = my_max(util_mat + beta * repmat(v_t1.T,N, 1))
-print 'The policy function is to leave', polt
-print 'The value function is this', vt
 
 ## problem 3
 def norm(vt, vt1):

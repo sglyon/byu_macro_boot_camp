@@ -69,6 +69,7 @@ p_cube = np.tile(p_cube, (1, 1, N))
 
 # Create Utility matrix.
 # This is three dimensional. 1: w, 2: e, 3: w'
+# Note
 c_mat = np.empty((N, nodes, N))
 for i in range(N):
     for j in range(nodes):
@@ -79,15 +80,16 @@ for i in range(N):
                 c_mat[i, j, k] = 10e-10
 
 util_mat = np.log(c_mat)
+#wp = np.reshape(w, (1,1,N))
+#
+#
+#w_array = np.tile(w, (N, nodes, 1))
+#w_prime_array = np.tile(wp, (N, nodes, 1)).T
+#c_array = w_array - w_prime_array
+#c_array_bad = c_array <=0
+#c_array[c_array_bad] = 1e-10
+#util_mat = np.log(c_array)
 
-changes = 0
-for j in range(util_mat.shape[1]):
-    for i in range(util_mat.shape[0]):
-        for k in range(util_mat.shape[2]):
-            if k >= i:
-                util_mat[i,j,k] = -10e20
-                changes +=1
-print changes
 
 # Create value function matrix. v(w', e')
 vtp1 = np.zeros((N,nodes))
@@ -148,28 +150,27 @@ while theNorm > tol:
     vnew, pnew = do_iteration(vold)
     theNorm = my_norm(vnew, vold)
     iterations += 1
-<<<<<<< Updated upstream
 print '\nDone!\n After %.2f iterations the current value of delta = %f'\
                                                 % (iterations, theNorm)
 
 ## --------------------------------Problem 7--------------------------------- ##
-X, Y = np.meshgrid(support, w)
-fig = plt.figure()
-ax = fig.add_subplot(111, projection ='3d')
 
-surface = ax.plot_surface(X, Y, pnew, rstride = 1, cstride = 1)
-=======
 print '\nDone!\nCurrent value of delta after %.2f iterations is = %f' %\
        (iterations, theNorm)
 
-## --------------------------------Problem 7--------------------------------- ##
 X, Y = np.meshgrid(support[2:], w[2:])
 fig = plt.figure()
 ax = fig.add_subplot(111, projection ='3d')
 
 surface = ax.plot_surface(X, Y, pnew[2:,2:], rstride = 1, cstride = 1)
->>>>>>> Stashed changes
 plt.title('Policy Function')
 ax.set_xlabel('Taste Shock')
 ax.set_ylabel('Cake Today')
 plt.show()
+
+#mlab.figure()
+#mlab.surf(w, support, w[pnew])
+#mlab.xlabel('W', obejct = None)
+#mlab.ylabel('Taste Shock', obejct = None)
+#mlab.zlabel('Wprime', obejct = None)
+#mlab.show()
