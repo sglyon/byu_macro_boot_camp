@@ -10,7 +10,7 @@ import scipy.sparse.linalg as spla
 
 def hp_filter(data, lamb = 1600):
     """
-    This function will apply a Hodrick-Psomething filter to a dataset.
+    This function will apply a Hodrick-Prescott filter to a dataset.
     The return value is the filtered data-set found according to:
         min sum((X[t] - T[t])**2 + lamb*((T[t+1] - T[t]) - (T[t] - T[t-1]))**2)
           T   t
